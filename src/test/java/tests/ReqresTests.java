@@ -1,10 +1,13 @@
 package tests;
 
+import adapters.register.RegisterAdapter;
 import adapters.resourseslist.ResourcesAdapter;
 import adapters.users.UsersAdapter;
 import com.sun.tools.xjc.reader.xmlschema.bindinfo.BIConversion;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import models.register.RegisterSuccessful;
+import models.register.RegisterUser;
 import models.resourceslist.ResourcesList;
 import models.resourceslist.SingleResource;
 import models.users.JobUser;
@@ -87,23 +90,30 @@ public class ReqresTests extends BaseTest {
     }
 
     @Test(description = "Testing UPDATE [PUT] API" )
-    public void updateUser(){
+    public void updateUserTest(){
         JobUser expectedUser = new JobUser("morpheus", "zion", null, null);
         JobUser actualUserUpdateResponse = new UsersAdapter().put(new JobUser("morpheus", "zion", "", ""));
         assertEquals(actualUserUpdateResponse, expectedUser );
     }
 
     @Test(description = "Testing UPDATE [PUT] API" )
-    public void patchUser(){
+    public void patchUserTest(){
         JobUser expectedUser = new JobUser("morpheus", "zion", null, null);
         JobUser actualUserUpdateResponse = new UsersAdapter().patch(new JobUser("morpheus", "zion", "", ""));
         assertEquals(actualUserUpdateResponse, expectedUser);
     }
 
     @Test(description = "Testing DELETE USER API" )
-    public void deleteUser(){
+    public void deleteUserTest(){
         JobUser expectedUser = null;
         JobUser actualUserUpdateResponse = new UsersAdapter().delete(2);
         assertEquals(actualUserUpdateResponse, expectedUser);
+    }
+
+    @Test(description = "Testing REGISTER - SUCCESSFUL API")
+    public void registerUserTest() throws FileNotFoundException {
+        RegisterSuccessful expectedRegResp = gson.fromJson(new FileReader("src/test/java/resources/expectedRegisterSuccess.json"), RegisterSuccessful.class);
+        RegisterSuccessful actualRegResp = new RegisterAdapter().post(new RegisterUser("eve.holt@reqres.in", "pistol"));
+        assertEquals(actualRegResp,expectedRegResp);
     }
 }

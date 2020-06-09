@@ -12,5 +12,4 @@ public class RegisterUser {
     @Expose
     String password;
 
-
 }
